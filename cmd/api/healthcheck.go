@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// create a healthcheck handler
+// create a healthcheck handler post
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "status: available")
 	fmt.Fprintf(w, "environment: %s\n", app.config.env)

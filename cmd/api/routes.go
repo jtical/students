@@ -14,8 +14,8 @@ func (app *application) routes() *httprouter.Router {
 	router := httprouter.New()
 
 	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
-	//router.HandlerFunc(http.MethodPost, "/v1/string", app.createStringHandler)
-	//router.HandlerFunc(http.MethodGet, "/v1/student", app.showStudentHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/random/:id", app.createRandomStringHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/student", app.showStudentHandler)
 
 	return router
 }
