@@ -27,7 +27,7 @@ func (app *application) readIDParam(r *http.Request) (int64, error) {
 }
 
 // we create our method write json to create responses
-func (app *application) writeJSON(w http.ResponseWriter, status int, data interface{}, headers http.Header) error {
+func (app *application) writeJSON(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
 	//convert our map into json object
 	//marshal indent to separate key form value. to appear on seprate line.
 	js, err := json.MarshalIndent(data, "", "\t")

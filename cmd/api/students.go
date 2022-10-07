@@ -28,11 +28,10 @@ func (app *application) showStudentHandler(w http.ResponseWriter, r *http.Reques
 		Color:     "black",
 		Version:   1,
 	}
-	err := app.writeJSON(w, http.StatusOK, student, nil)
+	err := app.writeJSON(w, http.StatusOK, envelope{"student": student}, nil)
 	if err != nil {
-		app.logger.Panicln(err)
-		http.Error(w, "The server encounter a problem and could not process request", http.StatusInternalServerError)
-		return
+		app.serverErrorResponse(w, r, err)
+
 	}
 
 }
