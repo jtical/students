@@ -5,6 +5,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"students.joelical.net/internal/data"
 )
 
 // createStudentHandler for the POST /v1/entries endpoint
@@ -14,21 +17,47 @@ func (app *application) createStudentHandler(w http.ResponseWriter, r *http.Requ
 
 // showStudentHandler for the GET /v1/Student endpoint
 func (app *application) showStudentHandler(w http.ResponseWriter, r *http.Request) {
-	js := `{"Student_ID": "2005113038", "Student_Name": "Joel T. Ical", "Hobby": "Drawing", "Favorite_Color": "Black"}`
-	js = fmt.Sprintf(js)
-	//specify that we will serve our response in JSON
-	w.Header().Set("Content-Type", "application/json")
-	//write the JSON as the HTTP response body
-	w.Write([]byte(js))
+
+	student := data.Student{
+		ID:        "2005113038",
+		CreatedAt: time.Now(),
+		Name:      "Joel T. Ical",
+		Phone:     "601-4113",
+		Email:     "2005113038@gmail.com",
+		Hobby:     []string{"Drawing", "Reading"},
+		Color:     "black",
+		Version:   1,
+	}
+	err := app.writeJSON(w, http.StatusOK, student, nil)
+	if err != nil {
+		app.logger.Panicln(err)
+		http.Error(w, "The server encounter a problem and could not process request", http.StatusInternalServerError)
+		return
+	}
+
 }
 
 // createStudentHandler for the GET /v1/string endpoint
 func (app *application) createRandomStringHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := app.readIDParam(r)
+	/*id, err := app.readIDParam(r)
 	if err != nil {
 		http.NotFound(w, r)
 		return
 	}
-	//display id
-	fmt.Fprintf(w, "show the details for student %d\n", id)
+	student := data.Student{
+		ID:        id,
+		CreatedAt: time.Now(),
+		Name:      "Joel T. Ical",
+		Phone:     "601-4113",
+		Email:     "2005113038@gmail.com",
+		Hobby:     []string{"Drawing", "Reading"},
+		Color:     "black",
+		Version:   1,
+	}
+	err = app.writeJSON(w, http.StatusOK, student, nil)
+	if err != nil {
+		app.logger.Println(err)
+		http.Error(w, "the server encoutered a proble", http.StatusInternalServerError)
+	}*/
+
 }
