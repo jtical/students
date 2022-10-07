@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -12,7 +13,22 @@ import (
 
 // createStudentHandler for the POST /v1/entries endpoint
 func (app *application) createStudentHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "creating a new entry..")
+	//our target decode destination
+	var input struct {
+		Name  string   `json:"name"`
+		Email string   `json:"email"`
+		Phone string   `json:"phone"`
+		Hobby []string `json:"hobby"`
+	}
+	//initialize a new json.decoder instance
+	err := json.NewDecoder(r.Body).Decode((&input))
+	if err != nil {
+		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+	//Display the request
+	fmt.Fprintf(w, "%+v\n", input)
+
 }
 
 // showStudentHandler for the GET /v1/Student endpoint
