@@ -43,3 +43,9 @@ func (app *application) methodNotAllowedesponse(w http.ResponseWriter, r *http.R
 	message := fmt.Sprintf("the %s method is not allowed for this resource", r.Method) // use formated string to allow message to be dynamic
 	app.errorResponse(w, r, http.StatusMethodNotAllowed, message)
 }
+
+// a method for bad request
+func (app *application) badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+	//create our message
+	app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+}

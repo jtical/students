@@ -3,7 +3,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -11,7 +10,7 @@ import (
 	"students.joelical.net/internal/data"
 )
 
-// createStudentHandler for the POST /v1/entries endpoint
+// createStudentHandler for the POST /v1/student endpoint
 func (app *application) createStudentHandler(w http.ResponseWriter, r *http.Request) {
 	//our target decode destination
 	var input struct {
@@ -21,9 +20,9 @@ func (app *application) createStudentHandler(w http.ResponseWriter, r *http.Requ
 		Hobby []string `json:"hobby"`
 	}
 	//initialize a new json.decoder instance
-	err := json.NewDecoder(r.Body).Decode((&input))
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		app.badRequestResponse(w, r, err)
 		return
 	}
 	//Display the request
@@ -33,9 +32,14 @@ func (app *application) createStudentHandler(w http.ResponseWriter, r *http.Requ
 
 // showStudentHandler for the GET /v1/Student endpoint
 func (app *application) showStudentHandler(w http.ResponseWriter, r *http.Request) {
-
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+	//Create a new instance of the student struct containing the ID we extracted from our URL and some sample data
 	student := data.Student{
-		ID:        "2005113038",
+		ID:        id,
 		CreatedAt: time.Now(),
 		Name:      "Joel T. Ical",
 		Phone:     "601-4113",
@@ -44,10 +48,9 @@ func (app *application) showStudentHandler(w http.ResponseWriter, r *http.Reques
 		Color:     "black",
 		Version:   1,
 	}
-	err := app.writeJSON(w, http.StatusOK, envelope{"student": student}, nil)
+	err = app.writeJSON(w, http.StatusOK, envelope{"student": student}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
-
 	}
 
 }
