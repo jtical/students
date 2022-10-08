@@ -5,7 +5,7 @@ package data
 // holds student informatiom
 // back tick character(struct tags) shows how the key should be formated
 type Student struct {
-	ID            string   `json:"id"`
+	ID            int64    `json:"id"`
 	Name          string   `json:"name"`
 	Phone         string   `json:"phone"`
 	Work          string   `json:"work"`
