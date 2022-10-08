@@ -1,12 +1,33 @@
+// Filename: cmd/api/randomize.go
 package main
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+	"net/http"
 
-type Tools struct{}
+	"students.joelical.net/internal/data"
+)
 
-const randomStringSource = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+_#$-!~"
+func (app *application) showRandomizeHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+	if err != nil {
+		app.notFoundResponse(w, r)
+		return
+	}
+	rString := generateRandomString(id)
+	//create a new instance of data struct
+	data := data.RandomString{
+		Data: rString,
+	}
+	err = app.writeJSON(w, http.StatusOK, envelope{"data": data}, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
 
-func (t *Tools) generateRandomString(length int) string {
+func generateRandomString(length int64) string {
+
+	randomStringSource := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+_#$-!~"
 	s := make([]rune, length)
 	r := []rune(randomStringSource)
 
