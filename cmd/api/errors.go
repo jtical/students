@@ -51,8 +51,9 @@ func (app *application) badRequestResponse(w http.ResponseWriter, r *http.Reques
 	app.errorResponse(w, r, http.StatusBadRequest, err.Error())
 }
 
+//user prodive in valid entries
 //Validation errors
-/*
+
 func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
-	app.errorRepsonse(w, r, http.StatusUnprocessableEntity, errors)
-}*/
+	app.errorResponse(w, r, http.StatusUnprocessableEntity, errors)
+}
